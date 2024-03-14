@@ -89,12 +89,4 @@ jobs:
         ./kustomize build . | kubectl apply -f -
         kubectl rollout status deployment/$DEPLOYMENT_NAME
         kubectl get services -o wide
-  # Install gcloud, 'setup-gcloud' automatically picks up authentication from 'auth'.
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
 
-   # Now you can run gcloud commands authenticated as the impersonated service account.
-      - name: Access Secret
-        id: gcloud
-        run: |
-          gcloud secrets versions access "latest" --secret "my-secret"
