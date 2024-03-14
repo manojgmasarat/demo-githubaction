@@ -11,13 +11,14 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
  # Configure Workload Identity Federation via a credentials file.
       - name: Authenticate to Google Cloud
         id: auth
         uses: google-github-actions/auth@v1
         with:
           token_format: access_token
+          project_id: actions-417218
           workload_identity_provider: projects/3534070827/locations/global/workloadIdentityPools/githubactions/providers/github'
           service_account: github-action@actions-417218.iam.gserviceaccount.com
 
