@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4 
  # Configure Workload Identity Federation via a credentials file.
       - name: Authenticate to Google Cloud
         id: auth
