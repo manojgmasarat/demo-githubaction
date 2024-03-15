@@ -67,19 +67,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      # NOTE: Alternative option - authentication via credentials json
       - name: Google Auth
         id: auth
-        uses: "google-github-actions/auth@v0"
+        uses: 'google-github-actions/auth@v0'
         with:
-          workload_identity_provider: "projects/3534070827/locations/global/workloadIdentityPools/githubactions/providers/github" # e.g. - projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
-          service_account: "github-action@actions-417218.iam.gserviceaccount.com" # e.g. - my-service-account@my-project.iam.gserviceaccount.com
-
-      # NOTE: Alternative option - authentication via credentials json
-      # - name: Google Auth
-      #   id: auth
-      #   uses: 'google-github-actions/auth@v0'
-      #   with:
-      #     credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+          credentials_json: '${{ secrets.SA_CREDS }}'
 
       - name: Deploy to Cloud Run
         id: deploy
@@ -88,7 +81,7 @@ jobs:
           service: ${{ env.SERVICE }}
           region: ${{ env.REGION }}
           # NOTE: If required, update to the appropriate source folder
-          source: ./
+          source: ./gcp-service
 
       # If required, use the Cloud Run url output in later steps
       - name: Show Output
