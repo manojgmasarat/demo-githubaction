@@ -7,9 +7,11 @@ permissions:
 
 on:
   push:
-    
+    branches:
+      - main  # Trigger on push to main branch
   pull_request:
-   
+    branches:
+      - main  # Trigger on pull request targeting the main branch
 
 jobs:
   lint:
@@ -23,6 +25,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: npm install
@@ -41,6 +51,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       - name: Install dependencies
         run: npm install
@@ -61,7 +79,7 @@ jobs:
     name: Trigger CD Workflow After Merge
     runs-on: ubuntu-latest
     needs: [lint, test]
-    if: github.event_name == 'push'  # Trigger CD only after push to main
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'  # Trigger CD only after push to main
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -74,5 +92,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: "cd.yml",
-              ref: context.ref
+              ref: "main"
             })
